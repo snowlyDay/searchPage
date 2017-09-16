@@ -72,29 +72,6 @@ def download_dunwan_page_index(name):
         log("find dunwan in index")
 
 
-# TODO 87pkencode error
-def download_html_87pk_index_context(url, name):
-    global baqipk_index_gotit
-    if baqipk_index_gotit:
-        return
-    html_context = load_page_html(url)
-
-    # log(chardet.detect(html_context))
-    # html_context.decode('ISO-8859-9')
-    # log(html_context)
-    # html_context = unicode(html_context, 'ISO-8859-9').encode('UTF-8')
-    log(chardet.detect(html_context))
-    # log(html_context)
-    soup = BeautifulSoup(html_context, "html.parser")
-    ul_mode = soup.find('ul', {'class', 'lb_list'})
-    for li_mode in ul_mode.findAll('li'):
-        h3_mode = li_mode.find('h3')
-        a_mode=h3_mode.find('a')
-        ll = a_mode.string
-        # log(ll)
-        # log(chardet.detect(ll))
-        # log(ll.decode('GBK').encode('UTF-8'))
-
 
 def download_html_87pk_nomal_context(url, name):
     global baqipk_index_gotit
