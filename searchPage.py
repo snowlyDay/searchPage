@@ -30,6 +30,10 @@ def load_page_html(url):
 def download_html_indie( name):
     url = "http://indiegame.tv"
     html_context = load_page_html(url)
+    if html_context.find(name) > 0:
+        log("find index page in indie")
+        return
+
     soup = BeautifulSoup(html_context, "html.parser")
     for ul_mode in soup.findAll('ul',{'class', 'center_list'}):
         for a_mode in ul_mode.findAll('a'):
@@ -38,6 +42,8 @@ def download_html_indie( name):
                 ratio =fuzz.ratio(a_mode.string, name)
                 if ratio >90:
                     log("link:"+url+link_href)
+
+
 
 def download_dunwan_page_html(url, name):
     global dunwan_gotit
@@ -58,26 +64,24 @@ def download_dunwan_page_html(url, name):
                 dunwan_gotit=True
 
 
-
 def download_dunwan_page(frm=1, page_count=1, name=""):
     for x in range(frm, frm+page_count):
         url = "http://www.dunwan.com/news/xinwen/list_3_%d.html"%x
         download_dunwan_page_html(url, name)
 
 def download_dunwan_page_index(name):
-    url = "http://www.dunwan.com"
-    html_context = load_page_html(url)
+    index_url = "http://www.dunwan.com"
+    html_context = load_page_html(index_url)
     html_context = unicode(html_context, 'GBK').encode('UTF-8')
     if html_context.find(name) > 0:
-        log("find dunwan in index")
+        log("find index page in dunwan")
+        return
+    download_dunwan_page(frm=1, page_count=30,name=name)
 
 
 
 def download_html_87pk_nomal_context(url, name):
-    global baqipk_index_gotit
     global baqipk_nomal_gotit
-    if baqipk_index_gotit:
-        return
     if baqipk_nomal_gotit:
         return
     html_context = load_page_html(url)
@@ -104,6 +108,7 @@ def download_html_87pk(name):
     for i in range(1,30):
         url_nomal="http://www.87pk.com/news/yxxw/index_%d.html"%i
         download_html_87pk_nomal_context(url_nomal, name)
+
 
 def download_html_qiyou(name):
     global qiyou_nomal_gotit
@@ -139,13 +144,13 @@ def main():
 
     download_html_indie( name)
 
-    download_dunwan_page(frm=1, page_count=30,name=name)
+    # download_dunwan_page_index(name)
+    #
+    # download_html_87pk(name)
+    #
+    # download_html_qiyou(name)
 
-    download_dunwan_page_index(name)
 
-    download_html_87pk(name)
-
-    download_html_qiyou(name)
 
 
 
